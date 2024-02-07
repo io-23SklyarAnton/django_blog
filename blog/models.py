@@ -3,6 +3,16 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 
+class PublishedManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(status='PB')
+
+
+class ThisYearManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(publish__year=2024)
+
+
 class Post(models.Model):
     class Status(models.TextChoices):
         DRAFT = 'DF', 'Draft'
@@ -18,6 +28,9 @@ class Post(models.Model):
     status = models.CharField(max_length=2,
                               choices=Status.choices,
                               default='DF')
+    objects = models.Manager()
+    published = PublishedManager()
+    actual = ThisYearManager()
 
     class Meta:
         ordering = ['-publish']
