@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Concrete Post</title>
-</head>
-<body>
-<h1>{{ post.title }}</h1>
-<p>{{ post.text }}</p>
-</body>
-</html>
+{% extends "basic.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+  <h1>{{ post.title }}</h1>
+  <p class="date">
+    Published {{ post.publish }} by {{ post.author }}
+  </p>
+  {{ post.text|linebreaks }}
+{% endblock %}

@@ -1,13 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Actual Posts</title>
-</head>
-<body>
-{% for post in posts %}
-    <h1>{{ post.title }}</h1>
-    <p>{{ post.text }}</p>
-{% endfor %}
-</body>
-</html>
+{% extends "basic.html" %}
+
+{% block title %}My Blog{% endblock %}
+
+{% block content %}
+  <h1>My Blog</h1>
+  {% for post in posts %}
+    <h2>
+      <a href="{% url 'blog:post_detail' post.id %}">
+        {{ post.title }}
+      </a>
+    </h2>
+    <p class="date">
+      Published {{ post.publish }} by {{ post.author }}
+    </p>
+    {{ post.text|truncatewords:30|linebreaks }}
+  {% endfor %}
+{% endblock %}
