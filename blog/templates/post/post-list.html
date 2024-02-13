@@ -11,7 +11,8 @@
       Published {{ post.publish }} by {{ post.author }}
     </p>
     <p>{{ post.text|truncatewords:30|linebreaks }}</p>
-    <a class="btn btn-primary btn-large" href="{% url "blog:post_detail" post.id %}" role="button">full post</a>
+    <a class="btn btn-primary btn-large" href="{{ post.get_absolute_url }}" role="button">full post</a>
       </div>
   {% endfor %}
+  {% include "paginator.html" with page=posts %}
 {% endblock %}
