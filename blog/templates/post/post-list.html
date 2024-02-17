@@ -1,18 +1,17 @@
 {% extends "basic.html" %}
 
 {% block title %}My Blog{% endblock %}
-
 {% block content %}
-  <h1>My Blog</h1>
-  {% for post in posts %}
-      <div class="jumbotron">
-    <h1 class="display-8">{{ post.title }}</h1>
-    <p class="lead date">
-      Published {{ post.publish }} by {{ post.author }}
-    </p>
-    <p>{{ post.text|truncatewords:30|linebreaks }}</p>
-    <a class="btn btn-primary btn-large" href="{{ post.get_absolute_url }}" role="button">full post</a>
-      </div>
-  {% endfor %}
-  {% include "paginator.html" with page=posts %}
+    <h1>My Blog</h1>
+    {% for post in posts %}
+        <div class="jumbotron">
+            <h1 class="display-8">{{ post.title }}</h1>
+            <p class="lead date">
+                Published {{ post.publish }} by {{ post.author }}
+            </p>
+            <p>{{ post.text|truncatewords:30|linebreaks }}</p>
+            <a class="btn btn-primary btn-large" href="{{ post.get_absolute_url }}" role="button">full post :)</a>
+        </div>
+    {% endfor %}
+    {% include "paginator.html" with page=page_obj %}
 {% endblock %}
