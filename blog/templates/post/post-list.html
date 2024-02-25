@@ -13,5 +13,5 @@
             <a class="btn btn-primary btn-large" href="{{ post.get_absolute_url }}" role="button">full post :)</a>
         </div>
     {% endfor %}
-    {% include "paginator.html" with page=page_obj %}
+    {% include "includes/paginator.html" with page=page_obj %}
 {% endblock %}

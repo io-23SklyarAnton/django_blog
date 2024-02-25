@@ -10,29 +10,12 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <h1>{{ post.title }}</h1>
-                <p class="date">
-                    Published {{ post.publish }} by {{ post.author }}
-                </p>
-                {{ post.text|linebreaks }}
-
-                <h2>Share this post with your friend !</h2>
-                <form action="{{ post.get_absolute_url }}" class="form" method="post">
-                    {% csrf_token %}
-                    {{ form }}
-                    <button type="submit" class="btn btn-primary">Send</button>
-                </form>
+                {% include 'includes/share_form.html' %}
             </div>
         </div>
         <div class="row">
             <div class="col-12">
-                {% if sent %}
-                    <div class="alert alert-success" role="alert">
-                        <h4 class="alert-heading"></h4>
-                        <p>successfully sent!</p>
-                        <p class="mb-0"></p>
-                    </div>
-                {% endif %}
+                {% include 'includes/success alert.html' %}
             </div>
         </div>
     </div>
