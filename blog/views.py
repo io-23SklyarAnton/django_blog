@@ -4,7 +4,7 @@ from django.views.generic import ListView, DetailView
 from django.core.mail import send_mail
 
 from .models import Post
-from .forms import EmailForm
+from .forms import EmailForm, PostForm
 
 
 def home_page(request):
@@ -37,3 +37,18 @@ class PostDetail(View):
             send_mail(title, description, '80kap.i.toshka@gmail.com', [clear_data['to']])
             sent = True
         return render(request, 'post/post-detail.html', {'post': post, 'form': EmailForm(), 'sent': sent})
+
+
+class PostCreate(View):
+    form = PostForm()
+
+    def get(self, request):
+        return render(request, 'post/post-create.html', {'form': self.form})
+
+    def post(self, request):
+        sent = False
+        form = PostForm(request.POST)
+        if form.is_valid():
+            sent = True
+            form.save()
+        return render(request, 'post/post-create.html', {'form': self.form, 'sent': sent})

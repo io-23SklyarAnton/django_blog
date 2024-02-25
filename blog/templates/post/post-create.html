@@ -1,0 +1,20 @@
+{% extends 'basic.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <form class="form" action="" method="post">
+                    {% csrf_token %}
+                    {{ form }}
+                    <input type="submit" class="btn btn-success">
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                {% include 'includes/success alert.html' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
