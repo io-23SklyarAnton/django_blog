@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.core.mail import send_mail
+from django.views.decorators.http import require_POST
 
 from .models import Post
 from .forms import EmailForm, PostForm
@@ -24,6 +25,11 @@ class PostDetail(View):
                                  publish__day=day, slug=post_slug)
         return render(request, 'post/post-detail.html', {'post': post, 'form': EmailForm()})
 
+
+class SharePost(View):
+    def get(self, request, year, month, day, post_slug):
+        return render(request, 'post/share-post.html', {'form': EmailForm()})
+
     def post(self, request, year, month, day, post_slug):
         post = get_object_or_404(Post, status=Post.Status.PUBLISHED, publish__year=year, publish__month=month,
                                  publish__day=day, slug=post_slug)
@@ -36,7 +42,7 @@ class PostDetail(View):
             description = f"he sent you this message: {clear_data['description']}. Watch it on {post_url}"
             send_mail(title, description, '80kap.i.toshka@gmail.com', [clear_data['to']])
             sent = True
-        return render(request, 'post/post-detail.html', {'post': post, 'form': EmailForm(), 'sent': sent})
+        return render(request, 'post/share-post.html', {'post': post, 'form': EmailForm(), 'sent': sent})
 
 
 class PostCreate(View):

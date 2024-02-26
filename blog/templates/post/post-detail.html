@@ -10,12 +10,13 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                {% include 'includes/share_form.html' %}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                {% include 'includes/success alert.html' %}
+                <h1>{{ post.title }}</h1>
+                <p class="date">
+                    Published {{ post.publish }} by {{ post.author }}
+                </p>
+                {{ post.text|linebreaks }}
+                <a href="{% url 'blog:share_post' post.publish.year post.publish.month post.publish.day post.slug %}"
+                   class="btn btn-primary">Share Post</a>
             </div>
         </div>
     </div>

@@ -1,0 +1,18 @@
+{% extends 'basic.html' %}
+
+{% block title %}Share Post{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                {% include 'includes/share_form.html' %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                {% include 'includes/success alert.html' %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

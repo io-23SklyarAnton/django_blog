@@ -1,9 +1,3 @@
-<h1>{{ post.title }}</h1>
-<p class="date">
-    Published {{ post.publish }} by {{ post.author }}
-</p>
-{{ post.text|linebreaks }}
-
 <h2>Share this post with your friend !</h2>
 <form action="{{ post.get_absolute_url }}" class="form" method="post">
     {% csrf_token %}
