@@ -36,11 +36,7 @@ class SharePost(View):
         form = EmailForm(request.POST)
         sent = False
         if form.is_valid():
-            clear_data = form.cleaned_data
-            post_url = request.build_absolute_uri(post.get_absolute_url())
-            title = f"{clear_data['name']} wants you to read {post.title}"
-            description = f"he sent you this message: {clear_data['description']}. Watch it on {post_url}"
-            send_mail(title, description, '80kap.i.toshka@gmail.com', [clear_data['to']])
+            form.send_mail(request, post)
             sent = True
         return render(request, 'post/share-post.html', {'post': post, 'form': EmailForm(), 'sent': sent})
 
@@ -58,3 +54,8 @@ class PostCreate(View):
             sent = True
             form.save()
         return render(request, 'post/post-create.html', {'form': self.form, 'sent': sent})
+
+
+@require_POST
+def comment_post(request):
+    pass
