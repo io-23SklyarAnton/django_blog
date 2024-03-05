@@ -17,7 +17,23 @@
                 {{ post.text|linebreaks }}
                 <a href="{% url 'blog:share_post' post.publish.year post.publish.month post.publish.day post.slug %}"
                    class="btn btn-primary">Share Post</a>
+                {% include 'blog/includes/comment_form.html' %}
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-12">
+                {% for comment in post.comments.all %}
+                    <div class="comment">
+                        <h2>{{ comment.author.username }}</h2>
+                        <p class="date">{{ comment.created }}</p>
+                        <p>{{ comment.body }}</p>
+                    </div>
+                {% empty %}
+                    <h2>No comments yet</h2>
+                {% endfor %}
+            </div>
+        </div>
+
     </div>
 {% endblock %}
