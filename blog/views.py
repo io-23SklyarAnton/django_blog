@@ -1,11 +1,9 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, FormView
-from django.views.decorators.http import require_POST
 
-from .models import Post
-from .forms import EmailForm, PostForm
+from .models import Post, Comment
+from .forms import EmailForm, PostForm, CommentForm
 
 
 def home_page(request):
@@ -19,15 +17,31 @@ class AllPostList(ListView):
     context_object_name = 'posts'
 
 
-class PostDetail(DetailView):
+class PostDetail(DetailView, FormView, LoginRequiredMixin):
     queryset = Post.published.all()
     template_name = 'blog/post/post-detail.html'
     slug_url_kwarg = 'post_slug'
+    form_class = CommentForm
+    success_url = '#'
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = EmailForm()
+        context['comment_form'] = CommentForm()
         return context
+
+    def form_valid(self, form):
+        if self.request.user.is_anonymous:
+            return self.handle_no_permission()
+        post = self.get_object()
+        comment = form.save(commit=False)
+        comment.post = post
+        comment.author = self.request.user
+        comment.mail = self.request.user.email
+        comment.save()
+        return super().form_valid(form)
 
 
 class SharePost(LoginRequiredMixin, FormView):
@@ -51,8 +65,3 @@ class PostCreate(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         form.save()
         return render(self.request, 'blog/post/post-create.html', {'form': form, 'sent': True})
-
-
-@require_POST
-def comment_post(request):
-    pass

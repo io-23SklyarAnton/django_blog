@@ -37,12 +37,10 @@ form {
 
 #sidebar {
     font-family: "Agency FB", serif;
-    background: linear-gradient(to right, blue, pink);
-    background-blend-mode: lighten;
-    height: 100%;
+    background: linear-gradient(to right, rgba(0, 0, 255, 0.5), rgba(255, 192, 203, 0.5));
     flex: auto;
-
 }
+
 
 .link-container {
     display: flex;
@@ -55,6 +53,10 @@ p.date {
     font-family: georgia, serif;
     font-size: 12px;
     font-style: italic;
+}
+
+form.comment_form {
+    font-size: 20px;
 }
 
 /* pagination */
