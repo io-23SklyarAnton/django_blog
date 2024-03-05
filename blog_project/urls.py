@@ -23,6 +23,7 @@ from blog.views import home_page
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include('blog.urls', namespace='blog')),
+    path('users/', include('users.urls', namespace='users')),
     path('', home_page),
 ]
 

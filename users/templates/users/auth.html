@@ -1,0 +1,23 @@
+{% extends 'blog/basic.html' %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% bootstrap_css %}
+<link rel="stylesheet" href="{% static 'css/blog.css' %}">
+
+{% block title %}Authentication Page{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ next }}">
+                    {{ form.as_p }}
+                    <input type="submit">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

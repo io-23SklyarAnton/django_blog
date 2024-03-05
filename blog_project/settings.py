@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "bootstrap4",
     'blog.apps.BlogConfig',
+    'users.apps.UsersConfig'
 ]
 
 MIDDLEWARE = [
@@ -126,3 +127,7 @@ EMAIL_HOST_USER = '80kap.i.toshka@gmail.com'
 EMAIL_HOST_PASSWORD = 'pvlmvckirddwnfvr'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+LOGIN_REDIRECT_URL = '/blog/'
+LOGOUT_REDIRECT_URL = 'blog/'
+LOGIN_URL = 'users:login'

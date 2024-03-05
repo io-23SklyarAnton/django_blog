@@ -1,16 +1,16 @@
-{% extends 'basic.html' %}
+{% extends 'blog/basic.html' %}
 
 {% block title %}Share Post{% endblock %}
 {% block content %}
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                {% include 'includes/share_form.html' %}
+                {% include 'blog/includes/share_form.html' %}
             </div>
         </div>
         <div class="row">
             <div class="col-12">
-                {% include 'includes/success alert.html' %}
+                {% include 'blog/includes/success alert.html' %}
             </div>
         </div>
     </div>
