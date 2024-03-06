@@ -1,5 +1,6 @@
 {% extends "blog/basic.html" %}
 {% load static %}
+{% load blog_extras %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/blog.css' %}">
@@ -14,7 +15,7 @@
                 <p class="date">
                     Published {{ post.publish }} by {{ post.author }}
                 </p>
-                {{ post.text|linebreaks }}
+                {{ post.text|linebreaks|autocorrect }}
                 <a href="{% url 'blog:share_post' post.publish.year post.publish.month post.publish.day post.slug %}"
                    class="btn btn-primary">Share Post</a>
                 {% include 'blog/includes/comment_form.html' %}
