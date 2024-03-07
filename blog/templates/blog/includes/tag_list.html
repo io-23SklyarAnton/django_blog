@@ -1,0 +1,3 @@
+{% for tag in post.tags.all %}
+    <a href="{% url 'blog:posts_by_tag' tag.name %}" class="tag">{{ tag.name }}</a>
+{% endfor %}
