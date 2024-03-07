@@ -12,6 +12,7 @@
         <div class="row">
             <div class="col-12">
                 <h1>{{ post.title }}</h1>
+                {% include 'blog/includes/tag_list.html' %}
                 <p class="date">
                     Published {{ post.publish }} by {{ post.author }}
                 </p>

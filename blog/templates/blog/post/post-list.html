@@ -2,10 +2,15 @@
 
 {% block title %}My Blog{% endblock %}
 {% block content %}
-    <h1>Recent Posts</h1>
+    {% if tag %}
+        <h1>Results by {{ tag }} tag</h1>
+    {% else %}
+        <h1>Recent Posts</h1>
+    {% endif %}
     {% for post in posts %}
         <div class="jumbotron">
             <h1 class="display-8">{{ post.title }}</h1>
+            {% include 'blog/includes/tag_list.html' %}
             <p class="lead date">
                 Published {{ post.publish }} by {{ post.author }}
             </p>

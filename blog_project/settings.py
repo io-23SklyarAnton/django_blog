@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     "bootstrap4",
     'blog.apps.BlogConfig',
     'users.apps.UsersConfig',
-    'blog.templatetags.blog_extras'
+    'blog.templatetags.blog_extras',
+    'taggit'
 ]
 
 MIDDLEWARE = [

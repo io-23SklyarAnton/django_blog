@@ -13,8 +13,18 @@ def home_page(request):
 class AllPostList(ListView):
     template_name = 'blog/post/post-list.html'
     paginate_by = 2
-    queryset = Post.published.all()
     context_object_name = 'posts'
+
+    def get_queryset(self):
+        tag = self.kwargs.get('tag')
+        if tag:
+            return Post.published.filter(tags__name__in=[tag])
+        return Post.published.all()
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        context['tag'] = self.kwargs.get('tag')
+        return context
 
 
 class PostDetail(DetailView, FormView, LoginRequiredMixin):
@@ -57,11 +67,23 @@ class SharePost(LoginRequiredMixin, FormView):
         return render(self.request, 'blog/post/share-post.html', {'post': post, 'form': EmailForm(), 'sent': True})
 
 
-class PostCreate(LoginRequiredMixin, FormView):
+class PostCreate(FormView):
     template_name = 'blog/post/post-create.html'
     form_class = PostForm
     success_url = 'post/post-create.html'
 
     def form_valid(self, form):
-        form.save()
+        obj = form.save(commit=False)
+        obj.author = self.request.user
+        obj.save()
+        form.save_m2m()
         return render(self.request, 'blog/post/post-create.html', {'form': form, 'sent': True})
+
+
+class UserPosts(LoginRequiredMixin, ListView):
+    template_name = 'blog/post/user-posts.html'
+    paginate_by = 2
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        return Post.published.all().filter(author=self.request.user)

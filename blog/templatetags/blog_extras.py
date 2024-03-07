@@ -10,4 +10,3 @@ register = template.Library()
 def autocorrect(value):
     spell = Speller()
     return spell(value)
-

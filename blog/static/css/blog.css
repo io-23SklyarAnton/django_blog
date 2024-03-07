@@ -39,6 +39,7 @@ form {
     font-family: "Agency FB", serif;
     background: linear-gradient(to right, rgba(0, 0, 255, 0.5), rgba(255, 192, 203, 0.5));
     flex: auto;
+    height: fit-content;
 }
 
 
@@ -70,7 +71,7 @@ label {
     float: left;
     clear: both;
     color: #333;
-    margin-bottom: 4px;
+    margin: 20px 0 0;
 }
 
 input, textarea {
@@ -80,7 +81,7 @@ input, textarea {
     background: #ededed;
     border: 0;
     padding: 6px 10px;
-    font-size: 12px;
+    font-size: 20px;
 }
 
 input[type=submit] {

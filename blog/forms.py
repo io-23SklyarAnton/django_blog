@@ -20,7 +20,7 @@ class EmailForm(forms.Form):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'slug', 'status', 'publish', 'text', 'author']
+        fields = ['title', 'slug', 'status', 'publish', 'text', 'tags']
 
 
 class CommentForm(forms.ModelForm):
