@@ -19,14 +19,7 @@
             <div class="container-fluid">
                 <div class="row" id="header">
                     <div class="col-12 link-container">
-                        <a href="{% url 'blog:all_posts' %}" class="btn">Home</a>
-                        <a href="{% url 'blog:user_posts' request.user.username %}" class="btn">My Blog</a>
-                        <a href="#" class="btn">Info</a>
-                        {% if request.user.is_authenticated %}
-                            <a href="{% url 'users:logout' %}" class="btn">{{ request.user.username }} | Logout</a>
-                        {% else %}
-                            <a class="btn" href="{% url 'users:login' %}">Login</a>
-                        {% endif %}
+                        {% include 'blog/includes/header.html' %}
                     </div>
                 </div>
                 <div class="row">
