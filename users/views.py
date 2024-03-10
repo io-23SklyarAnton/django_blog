@@ -1,9 +1,9 @@
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView, LogoutView
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from .forms import LoginUserForm
+from django.views.generic import CreateView
+
+from .forms import LoginUserForm, RegistrationForm
 
 
 class Login(LoginView):
@@ -19,3 +19,9 @@ class Logout(LogoutView):
 
     def get_default_redirect_url(self):
         return reverse_lazy('blog:all_posts')
+
+
+class Registration(CreateView):
+    template_name = 'users/register.html'
+    form_class = RegistrationForm
+    success_url = reverse_lazy('users:login')

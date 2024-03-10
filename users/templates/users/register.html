@@ -1,0 +1,13 @@
+{% extends 'blog/basic.html' %}
+
+{% block title %}Registration{% endblock %}
+
+{% block content %}
+    <h1>Registration</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit">
+    </form>
+
+{% endblock %}

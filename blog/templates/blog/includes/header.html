@@ -6,6 +6,7 @@
     <a href="{% url 'users:logout' %}" class="btn">{{ request.user.username }} | Logout</a>
 {% else %}
     <a href="{% url 'users:login' %}" class="btn">My Blog</a>
+    <a href="{% url 'users:registration' %}" class="btn">Registration</a>
     <a class="btn" href="{% url 'users:login' %}">Login</a>
 {% endif %}
 
