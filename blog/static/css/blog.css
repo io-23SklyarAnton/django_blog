@@ -114,3 +114,8 @@ input[type=submit] {
     font-size: 12px;
     color: #666;
 }
+
+#sim_post {
+    margin: 10px 0 10px;
+    background: rgba(83, 83, 83, 0.61);
+}
