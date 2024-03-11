@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, FormView
 
@@ -38,8 +39,13 @@ class PostDetail(DetailView, FormView, LoginRequiredMixin):
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
+        post = self.get_object()
+        post_tags_ids = post.tags.values_list('id', flat=True)
+        similar_posts = Post.published.filter(tags__in=post_tags_ids).exclude(id=post.id)
+        similar_posts = similar_posts.annotate(num_tags=Count('tags')).order_by('-num_tags', '-publish')[:4]
         context = super().get_context_data(**kwargs)
         context['comment_form'] = CommentForm()
+        context['similar_posts'] = similar_posts
         return context
 
     def form_valid(self, form):

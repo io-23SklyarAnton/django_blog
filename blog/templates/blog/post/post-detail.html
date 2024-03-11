@@ -19,6 +19,17 @@
                 {{ post.text|linebreaks|autocorrect }}
                 <a href="{% url 'blog:share_post' post.publish.year post.publish.month post.publish.day post.slug %}"
                    class="btn btn-primary">Share Post</a>
+
+                <h1>Similar posts:</h1>
+                {% for similar_post in similar_posts %}
+                    <div id="sim_post">
+                        <a href="{{ similar_post.get_absolute_url }}">{{ similar_post.title }}</a>
+                        <p>{{ similar_post.text|truncatewords:20|linebreaks|autocorrect }}</p>
+                    </div>
+                {% empty %}
+                    <p>there is no similar posts yet :)</p>
+                {% endfor %}
+
                 {% include 'blog/includes/comment_form.html' %}
             </div>
         </div>
