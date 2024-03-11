@@ -1,0 +1,4 @@
+<h2>Popular Posts:</h2>
+{% for post in posts %}
+    <a class="btn" href="{{ post.get_absolute_url }}">{{ post.title }}</a><br>
+{% endfor %}
