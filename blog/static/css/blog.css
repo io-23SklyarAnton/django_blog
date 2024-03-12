@@ -115,7 +115,12 @@ input[type=submit] {
     color: #666;
 }
 
+#similar_posts {
+    margin-top: 50px;
+}
+
 #sim_post {
-    margin: 10px 0 10px;
-    background: rgba(83, 83, 83, 0.61);
+    margin: 20px 0 20px;
+    background: rgb(237 237 237 / 38%);
+    padding: 1px 1px 2px 10px;
 }
