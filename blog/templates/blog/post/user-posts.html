@@ -1,6 +1,9 @@
 {% extends 'blog/post/post-list.html' %}
 
 {% block title %}My Posts{% endblock %}
+{% block full_post_btn %}
+    <a href="{% url 'blog:user_post_detail' post.pk post.slug %}" class="btn btn-primary">Edit Post</a>
+{% endblock %}
 {% block content %}
     <div class="container-fluid">
         <div class="row">

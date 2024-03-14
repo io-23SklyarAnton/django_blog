@@ -11,45 +11,58 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <h1>{{ post.title }}</h1>
-                {% include 'blog/includes/tag_list.html' %}
-                <p class="date">
-                    Published {{ post.publish }} by {{ post.author }}
-                </p>
-                {{ post.text|linebreaks|autocorrect }}
-                <a href="{% url 'blog:share_post' post.publish.year post.publish.month post.publish.day post.slug %}"
+                {% block header %}
+                    {% block post_title %}<h1>{{ post.title }}</h1>{% endblock %}
+                    {% include 'blog/includes/tag_list.html' %}
+                    <p class="date">
+                        Published {{ post.publish }} by {{ post.author }}
+                    </p>
+                {% endblock %}
+                {% block post_content %}
+                    {{ post.text|linebreaks|autocorrect }}
+                {% endblock %}
+                <a href="{% url 'blog:share_post' post.pk post.slug %}"
                    class="btn btn-primary">Share Post</a>
 
-                <div id="similar_posts">
-                    <h1>Similar posts:</h1>
-                    {% for similar_post in similar_posts %}
-                        <div id="sim_post">
-                            <a href="{{ similar_post.get_absolute_url }}">{{ similar_post.title }}</a>
-                            <p>{{ similar_post.text|truncatewords:20|linebreaks|autocorrect }}</p>
+                {% block similar_posts %}
+                    <div id="similar_posts">
+                        <h1>Similar posts:</h1>
+                        {% for similar_post in similar_posts %}
+                            <div id="sim_post">
+                                <a href="{{ similar_post.get_absolute_url }}">{{ similar_post.title }}</a>
+                                <p>{{ similar_post.text|truncatewords:20|linebreaks|autocorrect }}</p>
+                            </div>
+                        {% empty %}
+                            <p>there is no similar posts yet :)</p>
+                        {% endfor %}
+                    </div>
+                {% endblock %}
+
+
+            </div>
+        </div>
+        {% block comments %}
+            <div class="row">
+                <div class="col-12">
+                    {% include 'blog/includes/comment_form.html' %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    {% for comment in post.comments.all %}
+                        <div class="comment">
+                            <h2>{{ comment.author.username }}</h2>
+                            <p class="date">{{ comment.created }}</p>
+                            <p>{{ comment.body }}</p>
                         </div>
                     {% empty %}
-                        <p>there is no similar posts yet :)</p>
+                        <h2>No comments yet</h2>
                     {% endfor %}
                 </div>
-
-
-                {% include 'blog/includes/comment_form.html' %}
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-12">
-                {% for comment in post.comments.all %}
-                    <div class="comment">
-                        <h2>{{ comment.author.username }}</h2>
-                        <p class="date">{{ comment.created }}</p>
-                        <p>{{ comment.body }}</p>
-                    </div>
-                {% empty %}
-                    <h2>No comments yet</h2>
-                {% endfor %}
-            </div>
-        </div>
+
+        {% endblock %}
 
     </div>
 {% endblock %}

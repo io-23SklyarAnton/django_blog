@@ -1,6 +1,5 @@
 from django.core.mail import send_mail
 from django.db.models import QuerySet, Count
-from django.forms import ModelForm
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 
@@ -33,9 +32,7 @@ def add_comment_to_post(request: HttpRequest, post: Post, form: CommentForm) -> 
 
 def send_email(form: EmailForm, request: HttpRequest, **kwargs) -> None:
     post = get_object_or_404(Post, status=Post.Status.PUBLISHED,
-                             publish__year=kwargs['year'],
-                             publish__month=kwargs['month'],
-                             publish__day=kwargs['day'],
+                             pk=kwargs['pk'],
                              slug=kwargs['post_slug'])
 
     post_url = request.build_absolute_uri(post.get_absolute_url())
@@ -49,3 +46,15 @@ def create_post(form: PostForm, request: HttpRequest) -> None:
     obj.author = request.user
     obj.save()
     form.save_m2m()
+
+
+def get_all_tag_names_from_kwargs(**kwargs) -> list:
+    return list(kwargs.values())
+
+
+def get_post_instance(pk: int) -> Post:
+    return get_object_or_404(Post, pk=pk)
+
+
+def get_all_published_posts() -> QuerySet:
+    return Post.published.all()
