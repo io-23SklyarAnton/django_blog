@@ -14,6 +14,7 @@
         <div class="col-2" id="sidebar">
             <div class="container-fluid">
                 <h1>Side Bar</h1>
+                <a href="{% url 'blog:post_feed' %}" class="btn">Subscribe to RSS feed!</a>
                 {% recent_posts %}
                 {% popular_posts %}
             </div>
