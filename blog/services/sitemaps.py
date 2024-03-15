@@ -1,5 +1,5 @@
 from django.contrib.sitemaps import Sitemap
-from .models import Post
+from blog.models import Post
 
 
 class PostSitemap(Sitemap):

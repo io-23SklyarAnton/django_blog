@@ -4,7 +4,8 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, FormView
 
 from .forms import EmailForm, PostForm, CommentForm
-from .post_services import get_posts_by_tag, get_similar_posts, add_comment_to_post, send_email, create_post, \
+from blog.services.post_services import get_posts_by_tag, get_similar_posts, add_comment_to_post, send_email, \
+    create_post, \
     get_post_instance, get_all_published_posts
 
 
@@ -51,7 +52,7 @@ class PostDetail(DetailView, FormView, LoginRequiredMixin):
 
     def form_valid(self, form):
         if self.request.user.is_anonymous:
-            self.handle_no_permission()
+            return self.handle_no_permission()
         add_comment_to_post(request=self.request, post=self.get_object(), form=form)
         return super().form_valid(form)
 

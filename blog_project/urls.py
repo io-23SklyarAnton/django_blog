@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from blog.views import home_page
 from django.contrib.sitemaps.views import sitemap
-from blog.sitemaps import PostSitemap
+from blog.services.sitemaps import PostSitemap
 
 sitemaps = {
     'posts': PostSitemap
