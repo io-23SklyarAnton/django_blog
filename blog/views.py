@@ -3,10 +3,11 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, FormView
 
-from .forms import EmailForm, PostForm, CommentForm
-from blog.services.post_services import get_posts_by_tag, get_similar_posts, add_comment_to_post, send_email, \
+from .forms import EmailForm, PostForm, CommentForm, SearchForm
+from blog.services.post_services import get_posts_by_tag_or_search_query, get_similar_posts, add_comment_to_post, \
+    send_email, \
     create_post, \
-    get_post_instance, get_all_published_posts
+    get_post_instance, get_all_published_posts, get_all_user_published_posts
 
 
 def home_page(request):
@@ -20,22 +21,24 @@ class AllPostList(ListView):
     context_object_name = 'posts'
 
     def get_queryset(self):
-        return get_posts_by_tag(self.kwargs.get('tag'))
+        return get_posts_by_tag_or_search_query(self.request, self.kwargs.get('tag'))
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
         context['tag'] = self.kwargs.get('tag')
+        context['query'] = self.request.GET.get('query')
+        context['search_form'] = SearchForm()
         return context
 
 
-class UserPosts(LoginRequiredMixin, ListView):
+class UserPosts(LoginRequiredMixin, AllPostList):
     """Shows all posts by loginned user"""
     template_name = 'blog/post/user-posts.html'
-    paginate_by = 2
-    context_object_name = 'posts'
 
     def get_queryset(self):
-        return get_all_published_posts().filter(author=self.request.user)
+        """getting posts by current loginned user"""
+        query = super().get_queryset()
+        return get_all_user_published_posts(author=self.request.user, queryset=query)
 
 
 class PostDetail(DetailView, FormView, LoginRequiredMixin):
@@ -48,7 +51,10 @@ class PostDetail(DetailView, FormView, LoginRequiredMixin):
     def get_context_data(self, **kwargs):
         """returns a list of the similar posts"""
         context = super().get_context_data(**kwargs)
-        return get_similar_posts(self.get_object(), context)
+        similar_posts = get_similar_posts(self.get_object())
+        context['comment_form'] = CommentForm()
+        context['similar_posts'] = similar_posts
+        return context
 
     def form_valid(self, form):
         if self.request.user.is_anonymous:

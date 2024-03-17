@@ -2,13 +2,23 @@
 
 {% block title %}My Blog{% endblock %}
 {% block content %}
-    {% block tag_list %}
-        {% if tag %}
-            <h1>Results by {{ tag }} tag</h1>
-        {% else %}
-            <h1>Recent Posts</h1>
-        {% endif %}
-    {% endblock %}
+    <div class="row">
+        <div class="col-10">
+            {% block header %}
+                {% if tag %}
+                    <h1>Results by {{ tag }} tag</h1>
+                {% elif query %}
+                    <h1>Results by {{ query }} search</h1>
+                {% else %}
+                    <h1>Recent Posts</h1>
+                {% endif %}
+            {% endblock %}
+        </div>
+        <div class="col-2">
+            {% include 'blog/includes/forms/search_form.html' %}
+        </div>
+    </div>
+
 
     {% block post_list %}
         {% for post in posts %}
