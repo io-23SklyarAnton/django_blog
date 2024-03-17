@@ -115,6 +115,24 @@ input[type=submit] {
     color: #666;
 }
 
+
+.search_form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search_input {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.submit_button input[type="submit"] {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+
 #similar_posts {
     margin-top: 50px;
 }
