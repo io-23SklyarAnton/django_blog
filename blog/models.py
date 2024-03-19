@@ -1,5 +1,4 @@
-import os
-
+from django.contrib.postgres.indexes import GinIndex
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -10,11 +9,6 @@ from taggit.managers import TaggableManager
 class PublishedManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(status='PB')
-
-
-class ThisYearManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(publish__year=2024)
 
 
 class Post(models.Model):
@@ -36,12 +30,15 @@ class Post(models.Model):
 
     objects = models.Manager()
     published = PublishedManager()
-    actual = ThisYearManager()
 
     class Meta:
         ordering = ['-publish']
         indexes = [
-            models.Index(fields=['-publish'])
+            models.Index(fields=['-publish']),
+            GinIndex(
+                fields=['title', 'text'],
+                name='search_vector_title_text_idx'
+            )
         ]
 
     def get_absolute_url(self):

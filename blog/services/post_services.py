@@ -19,10 +19,10 @@ def get_posts_by_tag_or_search_query(request: WSGIRequest, tag: str) -> QuerySet
         form = SearchForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data['query']
-            search_vector = SearchVector('title', 'text')
+            search_vector = SearchVector('title', weight='A') + SearchVector('text', weight='B')
             search_query = SearchQuery(query)
             results = results.annotate(search=search_vector, rank=SearchRank(search_vector, search_query)).filter(
-                search=search_query).order_by('-rank')
+                search=search_query, rank__gte=0.2).order_by('-rank')
         return results
     return results
 
