@@ -1,6 +1,6 @@
 <form class="search_form" action="" method="get">
     {% csrf_token %}
-    <div class="input-group mb-3">
+    <div class="input-group mb-3" id="searchform">
         {{ search_form }}
         <input type="submit" value="search">
     </div>

@@ -1,6 +1,7 @@
 from django import forms
 
 from .models import Post, Comment
+from django.contrib.auth.models import User
 
 
 class EmailForm(forms.Form):
@@ -29,4 +30,4 @@ class CommentForm(forms.ModelForm):
 
 
 class SearchForm(forms.Form):
-    query = forms.CharField(max_length=100)
+    query = forms.CharField(max_length=100, label='')

@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.models import User
 
 
 class LoginUserForm(AuthenticationForm):
@@ -30,3 +31,13 @@ class RegistrationForm(UserCreationForm):
         if get_user_model().objects.filter(email=cd['email']).exists():
             raise forms.ValidationError('This email is already exists')
         return cd['email']
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name']
+        # required = {
+        #     'first_name': None,
+        #     'last_name': None
+        # }
