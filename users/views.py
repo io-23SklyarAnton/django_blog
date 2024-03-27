@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LogoutView, PasswordChangeView, PasswordResetView, PasswordChangeDoneView, \
     PasswordResetConfirmView, PasswordResetDoneView, PasswordResetCompleteView
@@ -5,7 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 
-from .forms import RegistrationForm
+from .forms import RegistrationForm, UserForm
 
 
 class Logout(LogoutView):
@@ -22,8 +23,7 @@ class Registration(CreateView):
 
 class ProfileView(UpdateView):
     template_name = 'user/profile.html'
-    model = User
-    fields = ['username', 'first_name', 'last_name']
+    form_class = UserForm
 
     def get_object(self, **kwargs):
         return self.request.user

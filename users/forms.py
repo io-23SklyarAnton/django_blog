@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth.models import User
 
 
 class LoginUserForm(AuthenticationForm):
@@ -24,7 +23,11 @@ class RegistrationForm(UserCreationForm):
 
     class Meta:
         model = get_user_model()
-        fields = ['username', 'password1', 'password2', 'email', 'first_name', 'last_name']
+        fields = ['username', 'password1', 'password2', 'email', 'first_name', 'last_name', 'date_of_birth', 'avatar']
+        widgets = {
+            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+            'avatar': forms.FileInput(),
+        }
 
     def clean_email(self):
         cd = self.cleaned_data
@@ -35,9 +38,9 @@ class RegistrationForm(UserCreationForm):
 
 class UserForm(forms.ModelForm):
     class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name']
-        # required = {
-        #     'first_name': None,
-        #     'last_name': None
-        # }
+        model = get_user_model()
+        fields = ['username', 'first_name', 'last_name', 'avatar', 'date_of_birth']
+        widgets = {
+            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+            'avatar': forms.FileInput(),
+        }
