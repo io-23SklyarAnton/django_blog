@@ -1,7 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, FormView
+from django.views.generic import ListView, DetailView, FormView, UpdateView
+from django.contrib import messages
 
 from .forms import EmailForm, PostForm, CommentForm, SearchForm
 from blog.services.post_services import get_posts_by_tag_or_search_query, get_similar_posts, add_comment_to_post, \
@@ -60,6 +61,7 @@ class PostDetail(DetailView, FormView, LoginRequiredMixin):
         if self.request.user.is_anonymous:
             return self.handle_no_permission()
         add_comment_to_post(request=self.request, post=self.get_object(), form=form)
+        messages.success(self.request, message='comment added successfully !')
         return super().form_valid(form)
 
 
@@ -76,7 +78,8 @@ class SharePost(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         send_email(form, self.request, **self.kwargs)
-        context = {'form': EmailForm(), 'sent': True}
+        context = {'form': EmailForm()}
+        messages.success(self.request, message='Email has sent successfully !')
         return render(self.request, 'blog/post/share-post.html', context)
 
 
@@ -84,22 +87,21 @@ class PostCreate(LoginRequiredMixin, FormView):
     """Provide a form to create a new post"""
     template_name = 'blog/post/post-create.html'
     form_class = PostForm
-    success_url = 'post/post-create.html'
 
     def form_valid(self, form):
         create_post(form, self.request)
-        return render(self.request, 'blog/post/post-create.html', {'form': form, 'sent': True})
-
-
-class PostEdit(PostCreate):
-    """Provide a form to change your post"""
-    template_name = 'blog/post/post-edit.html'
-
-    def get_form_kwargs(self):
-        """adds Post instance arg to form"""
-        kwargs = super().get_form_kwargs()
-        kwargs['instance'] = get_post_instance(self.kwargs.get('pk'))
-        return kwargs
+        messages.success(self.request, message='Post created successfully !')
+        return render(self.request, 'blog/post/post-create.html', {'form': form})
 
     def get_success_url(self):
         return reverse_lazy('blog:user_posts', kwargs={'username': self.request.user.get_username()})
+
+
+class PostEdit(UpdateView):
+    """Provide a form to change your post"""
+    template_name = 'blog/post/post-edit.html'
+    form_class = PostForm
+
+    def get_success_url(self):
+        messages.success(self.request, message='post edited successfully')
+        return reverse_lazy('blog:user_post', kwargs=self.kwargs)

@@ -49,7 +49,7 @@ def send_email(form: EmailForm, request: WSGIRequest, **kwargs) -> None:
     """sends a letter to share the post via an email"""
     post = get_object_or_404(Post, status=Post.Status.PUBLISHED,
                              pk=kwargs['pk'],
-                             slug=kwargs['post_slug'])
+                             slug=kwargs['slug'])
 
     post_url = request.build_absolute_uri(post.get_absolute_url())
     title = f"{form.cleaned_data['name']} wants you to read {post.title}"

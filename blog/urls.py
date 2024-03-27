@@ -4,7 +4,7 @@ import os
 from blog.services.feed import LatestPostsFeed
 
 app_name = 'blog'
-concrete_post_url = '<int:pk>/<slug:post_slug>/'
+concrete_post_url = '<int:pk>/<slug:slug>/'
 
 urlpatterns = [
     path('tag/<str:tag>/', views.AllPostList.as_view(), name='posts_by_tag'),

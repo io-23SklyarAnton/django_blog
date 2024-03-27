@@ -1,11 +1,10 @@
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
 from django.contrib.auth.views import LogoutView, PasswordChangeView, PasswordResetView, PasswordChangeDoneView, \
     PasswordResetConfirmView, PasswordResetDoneView, PasswordResetCompleteView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
-
+from django.contrib import messages
 from .forms import RegistrationForm, UserForm
 
 
@@ -15,10 +14,11 @@ class Logout(LogoutView):
         return reverse_lazy('blog:all_posts')
 
 
-class Registration(CreateView):
+class Registration(SuccessMessageMixin, CreateView):
     template_name = 'registration/register.html'
     form_class = RegistrationForm
     success_url = reverse_lazy('users:login')
+    success_message = "%(username) account was created successfully"
 
 
 class ProfileView(UpdateView):
@@ -30,7 +30,8 @@ class ProfileView(UpdateView):
 
     def form_valid(self, form):
         form.save()
-        return render(self.request, self.template_name, {'success': True, 'form': form})
+        messages.success(self.request, message='profile changed successfully')
+        return render(self.request, self.template_name, {'form': form})
 
 
 class PasswordChange(PasswordChangeView):
