@@ -1,11 +1,15 @@
 from django.contrib.auth.views import LogoutView, PasswordChangeView, PasswordResetView, PasswordChangeDoneView, \
-    PasswordResetConfirmView, PasswordResetDoneView, PasswordResetCompleteView
+    PasswordResetConfirmView, PasswordResetDoneView, PasswordResetCompleteView, LoginView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 from django.contrib import messages
-from .forms import RegistrationForm, UserForm
+from .forms import RegistrationForm, UserForm, LoginUserForm
+
+
+class Login(LoginView):
+    form_class = LoginUserForm
 
 
 class Logout(LogoutView):
