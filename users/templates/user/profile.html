@@ -1,5 +1,5 @@
 {% extends 'blog/basic.html' %}
-
+{% load thumbnail %}
 {% block title %}Profile{% endblock %}
 
 {% block content %}
@@ -7,7 +7,9 @@
     <div class="row">
         <div class="col-12">
             {% if user.avatar %}
-                <img src="{{ user.avatar.url }}" alt="user avatar" class="img-fluid">
+                <a href="{{ user.avatar.url }}">
+                    <img src="{% thumbnail user.avatar 300x0 %}" alt="user avatar" class="img-fluid">
+                </a>
             {% endif %}
         </div>
     </div>

@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'taggit',
     'social_django',
     'django_extensions',
+    'easy_thumbnails',
 ]
 
 MIDDLEWARE = [
