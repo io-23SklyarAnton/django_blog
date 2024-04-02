@@ -28,9 +28,13 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.tiltonios.pythonanywhere.com',
-                 'tiltonios.pythonanywhere.com',
-                 '127.0.0.1', ]
+ALLOWED_HOSTS = [
+    'mysite.com',
+    '127.0.0.1',
+    'localhost',
+    'www.tiltonios.pythonanywhere.com',
+    'tiltonios.pythonanywhere.com',
+    'mysite.com']
 
 SITE_ID = 1
 
@@ -50,7 +54,9 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'users.apps.UsersConfig',
     'blog.templatetags.blog_extras',
-    'taggit'
+    'taggit',
+    'social_django',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -148,6 +154,15 @@ LOGIN_REDIRECT_URL = '/blog/'
 LOGOUT_REDIRECT_URL = 'blog/'
 LOGIN_URL = 'users:login'
 
+# auth config
 AUTH_USER_MODEL = 'users.User'
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend',
-                           'users.authentication.EmailAuthenticationBackend', ]
+                           'users.authentication.EmailAuthenticationBackend',
+                           'social_core.backends.facebook.FacebookOAuth2', ]
+
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
+SOCIAL_AUTH_FACEBOOK_KEY = os.getenv('SOCIAL_AUTH_FACEBOOK_KEY')
+SOCIAL_AUTH_FACEBOOK_SECRET = os.getenv('SOCIAL_AUTH_FACEBOOK_SECRET')
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id, name'
+}
