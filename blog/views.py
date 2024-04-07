@@ -8,7 +8,8 @@ from .forms import EmailForm, PostForm, CommentForm, SearchForm
 from blog.services.post_services import get_posts_by_tag_or_search_query, get_similar_posts, add_comment_to_post, \
     send_email, \
     create_post, \
-    get_post_instance, get_all_published_posts, get_all_user_published_posts
+    get_all_published_posts, get_all_user_posts, get_all_posts
+from .models import Post
 
 
 def home_page(request):
@@ -38,8 +39,8 @@ class UserPosts(LoginRequiredMixin, AllPostList):
 
     def get_queryset(self):
         """getting posts by current loginned user"""
-        query = super().get_queryset()
-        return get_all_user_published_posts(author=self.request.user, queryset=query)
+        query = get_posts_by_tag_or_search_query(self.request, self.kwargs.get('tag'), is_published=False)
+        return get_all_user_posts(author=self.request.user, queryset=query)
 
 
 class PostDetail(DetailView, FormView, LoginRequiredMixin):
@@ -68,6 +69,7 @@ class PostDetail(DetailView, FormView, LoginRequiredMixin):
 class UserPostDetail(PostDetail):
     """Shows the full user's post, but with possibility to edit this post"""
     template_name = 'blog/post/user-post-detail.html'
+    queryset = get_all_posts()
 
 
 class SharePost(LoginRequiredMixin, FormView):
@@ -100,8 +102,9 @@ class PostCreate(LoginRequiredMixin, FormView):
 class PostEdit(UpdateView):
     """Provide a form to change your post"""
     template_name = 'blog/post/post-edit.html'
+    model = Post
     form_class = PostForm
 
     def get_success_url(self):
         messages.success(self.request, message='post edited successfully')
-        return reverse_lazy('blog:user_post', kwargs=self.kwargs)
+        return reverse_lazy('blog:user_post_detail', kwargs=self.kwargs)

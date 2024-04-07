@@ -4,6 +4,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.utils.text import slugify
 from taggit.managers import TaggableManager
 
 
@@ -18,7 +19,7 @@ class Post(models.Model):
         PUBLISHED = 'PB', 'Published'
 
     title = models.CharField(max_length=250)
-    slug = models.SlugField(max_length=250)
+    slug = models.SlugField(max_length=250, blank=True)
     text = models.TextField()
     publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
@@ -41,6 +42,11 @@ class Post(models.Model):
                 name='search_vector_title_text_idx'
             )
         ]
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        return super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('blog:post_detail', args=[self.pk, self.slug])

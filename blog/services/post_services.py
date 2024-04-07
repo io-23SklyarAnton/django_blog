@@ -9,10 +9,10 @@ from blog.forms import CommentForm, EmailForm, PostForm, SearchForm
 from blog.models import Post
 
 
-def get_posts_by_tag_or_search_query(request: WSGIRequest, tag: str) -> QuerySet:
+def get_posts_by_tag_or_search_query(request: WSGIRequest, tag: str, is_published: bool = True) -> QuerySet:
     """returns query of posts filtered by the tag nor search expression"""
     query = request.GET.get('query')
-    results = Post.published.all()
+    results = Post.published.all() if is_published else Post.objects.all()
     if tag:
         results = results.filter(tags__name__in=[tag])
     if query:
@@ -80,9 +80,14 @@ def get_all_published_posts() -> QuerySet:
     return Post.published.all()
 
 
-def get_all_user_published_posts(author: User, queryset: QuerySet = None) -> QuerySet:
+def get_all_posts() -> QuerySet:
+    """returns all posts"""
+    return Post.objects.all()
+
+
+def get_all_user_posts(author: User, queryset: QuerySet = None) -> QuerySet:
     """returns all posts from a certain user
     takes optional param queryset to filter certain query
     """
-    result = queryset or get_all_published_posts()
+    result = queryset or Post.objects.all()
     return result.filter(author=author)
