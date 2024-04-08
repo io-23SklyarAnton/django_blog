@@ -8,6 +8,12 @@ from django.shortcuts import get_object_or_404
 from blog.forms import CommentForm, EmailForm, PostForm, SearchForm
 from blog.models import Post
 
+import redis
+
+from blog_project import settings
+
+r = redis.Redis(settings.REDIS_HOST, settings.REDIS_PORT, settings.REDIS_DB)
+
 
 def get_posts_by_tag_or_search_query(request: WSGIRequest, tag: str, is_published: bool = True) -> QuerySet:
     """returns query of posts filtered by the tag nor search expression"""
@@ -91,3 +97,13 @@ def get_all_user_posts(author: User, queryset: QuerySet = None) -> QuerySet:
     """
     result = queryset or Post.objects.all()
     return result.filter(author=author)
+
+
+def increase_views(post_name):
+    """increase the num of views in the redis storage"""
+    return r.incr(post_name)
+
+
+def get_var(var_name):
+    """return a variable from the redis storage"""
+    return r.get(var_name)
