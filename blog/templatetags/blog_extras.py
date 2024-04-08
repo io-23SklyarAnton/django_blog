@@ -1,9 +1,12 @@
 from django import template
 from django.template.defaultfilters import stringfilter
 from autocorrect import Speller
-from django.db.models import Count
+
+from blog.services.redis_services import get_redis_dispatcher
 
 register = template.Library()
+
+r = get_redis_dispatcher()
 
 
 @register.filter(is_safe=True)
@@ -23,5 +26,8 @@ def recent_posts(value=3):
 @register.inclusion_tag('blog/includes/popular-posts.html')
 def popular_posts(value=3):
     from ..models import Post
-    posts = Post.published.annotate(total_comments=Count('comments')).order_by('-total_comments')[:value]
+    posts_rank = r.zrange("total_views", 0, -1, desc=True)
+    posts_rank_ids = [int(p_id) for p_id in posts_rank][:value]
+    posts = list(Post.published.filter(id__in=posts_rank_ids))
+    posts.sort(key=lambda x: posts_rank_ids.index(x.id))
     return {'posts': posts}

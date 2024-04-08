@@ -8,8 +8,9 @@ from .forms import EmailForm, PostForm, CommentForm, SearchForm
 from blog.services.post_services import get_posts_by_tag_or_search_query, get_similar_posts, add_comment_to_post, \
     send_email, \
     create_post, \
-    get_all_published_posts, get_all_user_posts, get_all_posts, increase_views, get_var
+    get_all_published_posts, get_all_user_posts, get_all_posts
 from .models import Post
+from .services.redis_services import increase_views, get_var
 
 
 def home_page(request):
@@ -53,7 +54,7 @@ class PostDetail(DetailView, FormView, LoginRequiredMixin):
     def get_context_data(self, **kwargs):
         """return a list of the similar post, comment form and increase the views amount"""
         if not kwargs.get('no_increase'):
-            increase_views(f"post:{self.get_object().id}:views")
+            increase_views(self.get_object().id)
         context = super().get_context_data(**kwargs)
         similar_posts = get_similar_posts(self.get_object())
         context['comment_form'] = CommentForm()
