@@ -13,7 +13,7 @@
             <div class="col-12">
                 {% block header %}
                     {% block post_title %}<h1>{{ post.title }}</h1>{% endblock %}
-                    <p id="views">total views: {{ views_amount }}</p>
+                    <p id="views">{{ views_amount }} view{{ views_amount|pluralize }}</p>
                     {% include 'blog/includes/tag_list.html' %}
                     <p class="date">
                         Published {{ post.publish }} by {{ post.author }}
